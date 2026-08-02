@@ -413,8 +413,7 @@ const STR = {
     footer: { role: "Digital prototype", loc: "Ouagadougou, Burkina Faso" },
   },
 };
-
-function useOnScreen(threshold = 0.25) {
+function useOnScreen(threshold = 0.25, rootMargin = "0px") {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -424,6 +423,13 @@ function useOnScreen(threshold = 0.25) {
       ([entry]) => {
         if (entry.isIntersecting) setVisible(true);
       },
+      { threshold, rootMargin }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold, rootMargin]);
+  return [ref, visible];
+},
       { threshold }
     );
     obs.observe(el);
@@ -518,7 +524,7 @@ function Hero({ t }) {
 
 /* ---------------------------- PHOTO BADGE ---------------------------- */
 function PhotoBadge({ trigger }) {
-  const [ref, visible] = useOnScreen(0.3);
+  const [ref, visible] = useOnScreen(0.55, "0px 0px -140px 0px");;
   const isVisible = trigger !== undefined ? trigger : visible;
   return (
     <div className="badge-wrap" ref={ref}>
@@ -830,22 +836,22 @@ h2{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:32px; lin
 
 .about-grid{ display:grid; grid-template-columns:1.2fr 0.8fr; gap:60px; align-items:start;}
 .about-text p{ font-size:16px; line-height:1.7; color:#c7c3ba; max-width:520px; margin-top:14px;}
-
-.badge-wrap{ display:flex; justify-content:center; padding-top:20px; }
+.badge-wrap{ display:flex; justify-content:center; padding-top:44px; }
 .badge{
   width:180px; height:220px; border-radius:14px; background:var(--panel);
   border:1px solid #23242f; position:relative; transform:translateY(-260px);
-  transform-origin:top center; overflow:visible;
+  transform-origin:top center; overflow:visible; opacity:0;
 }
 .badge--drop{ animation: dropBounce 1.1s cubic-bezier(.34,1.56,.64,1) forwards, sway 4.5s ease-in-out 1.1s infinite; }
 @keyframes dropBounce{
-  0%{ transform:translateY(-260px) rotate(0deg); }
+  0%{ transform:translateY(-260px) rotate(0deg); opacity:0; }
+  8%{ opacity:1; }
   60%{ transform:translateY(10px) rotate(3deg); }
   80%{ transform:translateY(-6px) rotate(-2deg); }
-  100%{ transform:translateY(0) rotate(0deg); }
+  100%{ transform:translateY(0) rotate(0deg); opacity:1; }
 }
 @keyframes sway{ 0%,100%{ transform:translateY(0) rotate(-2deg);} 50%{ transform:translateY(0) rotate(2deg);} }
-.badge-clip{ position:absolute; top:-30px; left:50%; transform:translateX(-50%); width:2px; height:30px; background:#3a3d4c; }
+.badge-clip{ position:absolute; top:-18px; left:50%; transform:translateX(-50%); width:2px; height:18px; background:#3a3d4c; }
 .badge-photo{
   width:100%; height:100%; border-radius:14px; overflow:hidden; background:#14151c;
 }
