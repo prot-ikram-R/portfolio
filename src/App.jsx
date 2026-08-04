@@ -413,6 +413,7 @@ const STR = {
     footer: { role: "Digital prototype", loc: "Ouagadougou, Burkina Faso" },
   },
 };
+
 function useOnScreen(threshold = 0.25, rootMargin = "0px") {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -428,13 +429,6 @@ function useOnScreen(threshold = 0.25, rootMargin = "0px") {
     obs.observe(el);
     return () => obs.disconnect();
   }, [threshold, rootMargin]);
-  return [ref, visible];
-},
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
   return [ref, visible];
 }
 
@@ -524,7 +518,7 @@ function Hero({ t }) {
 
 /* ---------------------------- PHOTO BADGE ---------------------------- */
 function PhotoBadge({ trigger }) {
-  const [ref, visible] = useOnScreen(0.55, "0px 0px -140px 0px");;
+  const [ref, visible] = useOnScreen(0.55, "0px 0px -140px 0px");
   const isVisible = trigger !== undefined ? trigger : visible;
   return (
     <div className="badge-wrap" ref={ref}>
@@ -836,6 +830,7 @@ h2{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:32px; lin
 
 .about-grid{ display:grid; grid-template-columns:1.2fr 0.8fr; gap:60px; align-items:start;}
 .about-text p{ font-size:16px; line-height:1.7; color:#c7c3ba; max-width:520px; margin-top:14px;}
+
 .badge-wrap{ display:flex; justify-content:center; padding-top:44px; }
 .badge{
   width:180px; height:220px; border-radius:14px; background:var(--panel);
